@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String @id @unique @db.VarChar(19)
+  currentMessages  Int    @default(0) @db.UnsignedInt
+  currentPoints    Int    @default(0) @db.UnsignedInt
+  currentVoiceTime Int    @default(0) @db.UnsignedInt
+  level            Int    @default(0) @db.UnsignedInt
+  totalMessages    Int    @default(0) @db.UnsignedInt
+  totalPoints      Int    @default(0) @db.UnsignedInt
+  totalVoiceTime   Int    @default(0) @db.UnsignedInt
+}

@@ -1,0 +1,5 @@
+Roles: 1-10
+at end of month, DELETE the 10 roles in all 6 servers,
+then create 10 new roles
+
+ignore bots!
