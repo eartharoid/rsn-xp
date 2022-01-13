@@ -9,7 +9,10 @@ const log = new Logger({
 	name: 'RsN / Activity Rewards',
 	transports: [
 		new ConsoleTransport(),
-		new FileTransport({ format: '[{timestamp}] [{LEVEL}] [{file}:{line}:{column}] {content}' })
+		new FileTransport({
+			format: '[{timestamp}] [{LEVEL}] [{file}:{line}:{column}] {content}',
+			level: 'verbose'
+		})
 	]
 });
 
@@ -27,8 +30,8 @@ class Bot extends DiscordClient {
 	constructor() {
 		super({
 			intents: [
-				Intents.FLAGS.GUILD_BANS,
 				Intents.FLAGS.GUILD_MEMBERS,
+				Intents.FLAGS.GUILD_MESSAGES,
 				Intents.FLAGS.GUILDS
 			],
 			presence: { status: 'dnd' }
@@ -51,7 +54,10 @@ class Bot extends DiscordClient {
 
 		fs.readdirSync('./src/listeners')
 			.filter(file => file.endsWith('.js'))
-			.forEach(name => this.listeners.set(name, require(`./listeners/${name}`)));
+			.forEach(name => {
+				const run = require(`./listeners/${name}`);
+				this.on(name.split('.')[0], (...args) => run(this, ...args));
+			});
 
 		this.login();
 	}
@@ -63,3 +69,5 @@ process.on('unhandledRejection', error => {
 	log.warn('An error was not caught');
 	log.error(error);
 });
+
+module.exports = Bot;
