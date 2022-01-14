@@ -26,15 +26,21 @@ const calcLevel = points => Math.floor(0.1 * Math.sqrt(points));
  * @returns
  */
 module.exports = async (client, message) => {
-	if (message.author.bot) return; // ignore bots
-
-	const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);
-	const jiblet_member = await jiblet_guild?.members.fetch(message.author.id);
-	const isJibletOwner = jiblet_member?.roles.cache.has(jiblet_role_id);
-	if (!jiblet_guild) client.log.warn('Client is not in the JIBLET server');
+	if (message.system || message.author.bot) return; // ignore bots
 
 	let boost = 1;
-	if (isJibletOwner) boost += 0.1;
+
+	try {
+		const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);
+		const jiblet_member = await jiblet_guild?.members.fetch(message.author.id);
+		const isJibletOwner = jiblet_member?.roles.cache.has(jiblet_role_id);
+		if (!jiblet_guild) client.log.warn('Client is not in the JIBLET server');
+		if (isJibletOwner) boost += 0.1;
+	} catch {
+		// do nothing,
+		// most likely caused by user not being in JIBLETVERSE server
+	}
+
 	if (message.member.premiumSinceTimestamp) boost += 0.1;
 
 	const points = calcPoints(message.content, boost);

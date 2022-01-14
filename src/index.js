@@ -45,7 +45,6 @@ class Bot extends DiscordClient {
 		this.servers = process.env.SERVERS.replace(/\s/g, '').split(/,/g);
 
 		this.commands = new Collection();
-		this.listeners = new Collection();
 		this.voice_time = new Collection();
 
 		fs.readdirSync('./src/commands')
