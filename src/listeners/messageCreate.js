@@ -1,4 +1,5 @@
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
+const { calcLevel } = require('../functions');
 
 const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
 
@@ -18,7 +19,6 @@ const calcPoints = (content, boost) => {
 	return Math.ceil(Math.ceil(points) * boost);
 };
 
-const calcLevel = points => Math.floor(0.1 * Math.sqrt(points));
 
 /**
  * @param {import('../')} client
