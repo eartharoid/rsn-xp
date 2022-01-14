@@ -18,16 +18,16 @@ module.exports = client => {
 			} else {
 				let row = await client.prisma.user.upsert({
 					create: {
-						currentPoints: PPM,
+						currentPoints: PPM * 5,
 						currentVoiceTime: 5,
 						id,
-						totalPoints: PPM,
+						totalPoints: PPM * 5,
 						totalVoiceTime: 5
 					},
 					update: {
-						currentPoints: { increment: PPM },
+						currentPoints: { increment: PPM * 5 },
 						currentVoiceTime: { increment: 5 },
-						totalPoints: { increment: PPM },
+						totalPoints: { increment: PPM * 5 },
 						totalVoiceTime: { increment: 5 }
 					},
 					where: { id: id }
