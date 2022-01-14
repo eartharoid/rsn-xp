@@ -41,7 +41,7 @@ module.exports = async (client, old_vs, new_vs) => {
 		const points = PPM * mins * boost;
 
 		client.log.info(`"${new_vs.member.user.tag}" left the "${old_vs.channel.name}" VC after ${mins} minutes`);
-		client.log.verbose(`guild=${new_vs.guild.id};channel=${old_vs.channel.id};author=${new_vs.member.user.id};boost=${boost};points=${points}`);
+		client.log.verbose(`event:earn_xp:guild=${new_vs.guild.id};channel=${old_vs.channel.id};user=${new_vs.member.user.id};boost=${boost};points=${points}`);
 
 		let row = await client.prisma.user.upsert({
 			create: {

@@ -44,7 +44,7 @@ module.exports = async (client, message) => {
 	if (message.member.premiumSinceTimestamp) boost += 0.1;
 
 	const points = calcPoints(message.content, boost);
-	client.log.verbose(`guild=${message.guild.id};channel=${message.channel.id};author=${message.author.id};boost=${boost};points=${points}`);
+	client.log.verbose(`event:earn_xp:type=message;guild=${message.guild.id};channel=${message.channel.id};user=${message.author.id};boost=${boost};points=${points}`);
 
 	let row = await client.prisma.user.upsert({
 		create: {
