@@ -1,5 +1,3 @@
-
-
 /**
  * @param {import("../")} client
  */

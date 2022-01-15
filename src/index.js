@@ -50,7 +50,7 @@ class Bot extends DiscordClient {
 
 		fs.readdirSync('./src/commands')
 			.filter(file => file.endsWith('.js'))
-			.forEach(name => this.commands.set(name, require(`./commands/${name}`)));
+			.forEach(name => this.commands.set(name.split('.')[0], require(`./commands/${name}`)));
 
 		fs.readdirSync('./src/listeners')
 			.filter(file => file.endsWith('.js'))

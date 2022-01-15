@@ -1,4 +1,7 @@
-const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
+const {
+	Message,  // eslint-disable-line no-unused-vars
+	MessageAttachment
+} = require('discord.js');
 const { calcLevel } = require('../functions');
 
 const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
@@ -71,7 +74,8 @@ module.exports = async (client, message) => {
 		});
 		client.log.info(`"${message.author.tag}" has reached level ${level}`);
 		try {
-			message.reply(`Congratulations, you are now **level ${level}**!`);
+			const attachment = new MessageAttachment(`./assets/level-up-${level}.png`);
+			message.reply({ files: [attachment] });
 		} catch (error) {
 			client.log.error(error);
 		}
