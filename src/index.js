@@ -16,15 +16,20 @@ const log = new Logger({
 	]
 });
 
-const { PrismaClient } = require('@prisma/client');
-
 const fs = require('fs');
-
 const {
 	Client: DiscordClient,
 	Collection,
 	Intents
 } = require('discord.js');
+const { PrismaClient } = require('@prisma/client');
+const readline = require('readline');
+
+const loadCommands = client => {
+	fs.readdirSync('./src/commands')
+		.filter(file => file.endsWith('.js'))
+		.forEach(name => client.commands.set(name.split('.')[0], require(`./commands/${name}`)));
+};
 
 class Bot extends DiscordClient {
 	constructor() {
@@ -48,9 +53,21 @@ class Bot extends DiscordClient {
 		this.commands = new Collection();
 		this.voice_time = new Collection();
 
-		fs.readdirSync('./src/commands')
-			.filter(file => file.endsWith('.js'))
-			.forEach(name => this.commands.set(name.split('.')[0], require(`./commands/${name}`)));
+		loadCommands(this);
+
+		this.rl = readline.createInterface({
+			input: process.stdin,
+			output: process.stdout
+		});
+
+		this.rl.on('line', input => {
+			if (input.toLowerCase() === 'reload') {
+				loadCommands(this);
+				this.log.success('Reloaded commands');
+			}
+		});
+
+
 
 		fs.readdirSync('./src/listeners')
 			.filter(file => file.endsWith('.js'))
