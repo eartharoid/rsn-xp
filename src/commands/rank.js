@@ -37,6 +37,16 @@ module.exports = async interaction => {
 	const ctx = canvas.getContext('2d');
 	const background = await loadImage('./assets/rank-card.png');
 	ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+
+	ctx.save();
+	ctx.beginPath();
+	ctx.arc(450, 100, 50, 0, Math.PI * 2, true);
+	ctx.closePath();
+	ctx.clip();
+	const avatar = await loadImage(user.displayAvatarURL({ format: 'png' }));
+	ctx.drawImage(avatar, 400, 50, 100, 100);
+	ctx.restore();
+
 	ctx.font = adjustFont(48, 200, 'Arial, sans-serif', canvas, user.tag);
 	ctx.fillStyle = BLUE;
 	ctx.fillText(user.tag, (canvas.width - ctx.measureText(user.tag).width) / 2, 200, 750);
@@ -55,12 +65,32 @@ module.exports = async interaction => {
 	ctx.font = rank_font;
 	ctx.fillText(`#${rank}`, (canvas.width - ctx.measureText(`#${rank}`).width) - 50, 100, 300);
 
+	const level_text = `LEVEL ${row.level}`;
+	ctx.font = adjustFont(32, 750, 'Arial Black, sans-serif', canvas, level_text);
+	ctx.fillText(level_text, (canvas.width - ctx.measureText(level_text).width) / 2, 255, 750);
+
+	const required_points = levels[row.level + 1] ?? 10000;
+	ctx.lineWidth = 15;
+	ctx.strokeStyle = '#030C19';
 	ctx.beginPath();
-	ctx.arc(450, 100, 50, 0, Math.PI * 2, true);
+	ctx.moveTo(100, 300);
+	ctx.lineTo(800, 300);
 	ctx.closePath();
-	ctx.clip();
-	const avatar = await loadImage(user.displayAvatarURL({ format: 'png' }));
-	ctx.drawImage(avatar, 400, 50, 100, 100);
+	ctx.stroke();
+	ctx.strokeStyle = BLUE;
+	ctx.beginPath();
+	ctx.moveTo(100, 300);
+	ctx.lineTo(100 + (row.currentPoints / required_points) * 700, 300);
+	ctx.closePath();
+	ctx.stroke();
+	ctx.restore();
+
+	const out_of = ` / ${required_points} POINTS`;
+	ctx.font = 'bold 32px Arial, sans-serif';
+	ctx.fillStyle = BLUE;
+	ctx.fillText(row.currentPoints, (canvas.width - ctx.measureText(row.currentPoints).width - ctx.measureText(out_of).width) / 2, 350, 300);
+	ctx.fillStyle = 'white';
+	ctx.fillText(out_of, (canvas.width - ctx.measureText(out_of).width + ctx.measureText(row.currentPoints).width) / 2, 350, 300);
 
 	const attachment = new MessageAttachment(canvas.toBuffer('image/png'), 'rank.png');
 	await interaction.editReply({ files: [attachment] });
