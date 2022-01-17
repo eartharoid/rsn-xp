@@ -24,6 +24,20 @@ const commands = [
 	},
 	{
 		defaultPermission: true,
+		description: 'View the stats of yourself or someone else',
+		name: 'stats',
+		options: [
+			{
+				description: 'The user to view',
+				name: 'user',
+				required: false,
+				type: 6 // USER
+			}
+		],
+		type: 'CHAT_MESSAGE'
+	},
+	{
+		defaultPermission: true,
 		description: 'Manage XP',
 		name: 'xp',
 		options: [

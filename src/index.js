@@ -62,6 +62,7 @@ class Bot extends DiscordClient {
 
 		this.rl.on('line', input => {
 			if (input.toLowerCase() === 'reload') {
+				this.commands.forEach((command, name) => delete require.cache[require.resolve(`./commands/${name}`)]);
 				loadCommands(this);
 				this.log.success('Reloaded commands');
 			}
