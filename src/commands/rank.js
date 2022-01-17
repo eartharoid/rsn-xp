@@ -66,21 +66,21 @@ module.exports = async interaction => {
 	ctx.fillText(`#${rank}`, (canvas.width - ctx.measureText(`#${rank}`).width) - 50, 100, 300);
 
 	const level_text = `LEVEL ${row.level}`;
-	ctx.font = adjustFont(32, 750, 'Arial Black, sans-serif', canvas, level_text);
-	ctx.fillText(level_text, (canvas.width - ctx.measureText(level_text).width) / 2, 255, 750);
+	ctx.font = adjustFont(36, 750, 'Arial Black, sans-serif', canvas, level_text);
+	ctx.fillText(level_text, (canvas.width - ctx.measureText(level_text).width) / 2, 260, 750);
 
 	const required_points = levels[row.level + 1] ?? 10000;
 	ctx.lineWidth = 15;
 	ctx.strokeStyle = '#030C19';
 	ctx.beginPath();
-	ctx.moveTo(100, 300);
-	ctx.lineTo(800, 300);
+	ctx.moveTo(100, 320);
+	ctx.lineTo(800, 320);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.strokeStyle = BLUE;
 	ctx.beginPath();
-	ctx.moveTo(100, 300);
-	ctx.lineTo(100 + (row.currentPoints / required_points) * 700, 300);
+	ctx.moveTo(100, 320);
+	ctx.lineTo(100 + (row.currentPoints / required_points) * 700, 320);
 	ctx.closePath();
 	ctx.stroke();
 	ctx.restore();
@@ -88,9 +88,9 @@ module.exports = async interaction => {
 	const out_of = ` / ${required_points} POINTS`;
 	ctx.font = 'bold 32px Arial, sans-serif';
 	ctx.fillStyle = BLUE;
-	ctx.fillText(row.currentPoints, (canvas.width - ctx.measureText(row.currentPoints).width - ctx.measureText(out_of).width) / 2, 350, 300);
+	ctx.fillText(row.currentPoints, (canvas.width - ctx.measureText(row.currentPoints).width - ctx.measureText(out_of).width) / 2, 375, 300);
 	ctx.fillStyle = 'white';
-	ctx.fillText(out_of, (canvas.width - ctx.measureText(out_of).width + ctx.measureText(row.currentPoints).width) / 2, 350, 300);
+	ctx.fillText(out_of, (canvas.width - ctx.measureText(out_of).width + ctx.measureText(row.currentPoints).width) / 2, 375, 300);
 
 	const attachment = new MessageAttachment(canvas.toBuffer('image/png'), 'rank.png');
 	await interaction.editReply({ files: [attachment] });
