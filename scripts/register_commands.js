@@ -48,11 +48,13 @@ const commands = [
 					{
 						description: 'The user to give XP to',
 						name: 'user',
+						required: true,
 						type: 6 // USER
 					},
 					{
 						description: 'The amount of XP to give',
 						name: 'amount',
+						required: true,
 						type: 4 // INTEGER
 					}
 				],
@@ -65,11 +67,13 @@ const commands = [
 					{
 						description: 'The user to take XP from',
 						name: 'user',
+						required: true,
 						type: 6 // USER
 					},
 					{
 						description: 'The amount of XP to take',
 						name: 'amount',
+						required: true,
 						type: 4 // INTEGER
 					}
 				],
