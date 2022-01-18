@@ -87,10 +87,14 @@ module.exports = async interaction => {
 
 	const out_of = ` / ${required_points} POINTS`;
 	ctx.font = 'bold 32px Arial, sans-serif';
+	const points_width = ctx.measureText(row.currentPoints).width + ctx.measureText(out_of).width ;
+	ctx.fillStyle = 'white';
+	ctx.fillRect((canvas.width - points_width - 20) / 2, 345, points_width + 20, 40);
 	ctx.fillStyle = BLUE;
 	ctx.fillText(row.currentPoints, (canvas.width - ctx.measureText(row.currentPoints).width - ctx.measureText(out_of).width) / 2, 375, 300);
-	ctx.fillStyle = 'white';
+	ctx.fillStyle = '#071F3F';
 	ctx.fillText(out_of, (canvas.width - ctx.measureText(out_of).width + ctx.measureText(row.currentPoints).width) / 2, 375, 300);
+
 
 	const attachment = new MessageAttachment(canvas.toBuffer('image/png'), 'rank.png');
 	await interaction.editReply({ files: [attachment] });
