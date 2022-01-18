@@ -10,8 +10,8 @@ module.exports = async interaction => {
 
 	try {
 		const admin_guild = interaction.client.guilds.cache.get(admin_guild_id);
-		const jiblet_member = await admin_guild?.members.fetch(interaction.user.id);
-		hasPermission = jiblet_member?.roles.cache.has(admin_role_id);
+		const admin_member = await admin_guild?.members.fetch(interaction.user.id);
+		hasPermission = admin_member?.roles.cache.has(admin_role_id);
 		if (!admin_guild) interaction.client.log.warn('Client is not in the RSN server');
 	} catch {
 		// do nothing,

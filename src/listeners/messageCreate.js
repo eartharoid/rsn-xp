@@ -49,7 +49,7 @@ module.exports = async (client, message) => {
 	const points = calcPoints(message.content, boost);
 	client.log.verbose(`event:earn_xp:type=message;guild=${message.guild.id};channel=${message.channel.id};user=${message.author.id};boost=${boost};points=${points}`);
 
-	let row = await client.prisma.user.upsert({
+	const row = await client.prisma.user.upsert({
 		create: {
 			currentMessages: 1,
 			currentPoints: points,
@@ -68,12 +68,8 @@ module.exports = async (client, message) => {
 
 	const level = calcLevel(row.currentPoints);
 	if (level !== row.level) {
-		row = await client.prisma.user.update({
-			data: { level },
-			where: { id: message.author.id }
-		});
-		client.log.info(`"${message.author.tag}" has reached level ${level}`);
 		try {
+			client.updateLevel(message.author, level); // don't await, too slow
 			const attachment = new MessageAttachment(`./assets/level-up-${level}.png`);
 			message.reply({ files: [attachment] });
 		} catch (error) {

@@ -3,6 +3,7 @@
 ```
 DISCORD_TOKEN=
 DATABASE_URL=
-SERVERS=
 ADMIN_ROLE=<server>/<role>
+JIBLET_ROLE=<server>/<role>
+CINEMA_CHANNEL=
 ```
