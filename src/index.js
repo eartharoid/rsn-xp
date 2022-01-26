@@ -23,7 +23,7 @@ const {
 	Intents
 } = require('discord.js');
 const { PrismaClient } = require('@prisma/client');
-const readline = require('readline');
+// const readline = require('readline');
 
 const loadCommands = client => {
 	fs.readdirSync('./src/commands')
