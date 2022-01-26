@@ -5,6 +5,7 @@ const {
 const { calcLevel } = require('../functions');
 
 const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
+const [supporter_guild_id, supporter_role_id] = process.env.SUPPORTER_ROLE.split(/\//);
 
 const calcPoints = (content, boost) => {
 	content = content.replace(/\s\s/g, '');
@@ -32,6 +33,17 @@ module.exports = async (client, message) => {
 	if (message.system || message.author.bot) return; // ignore bots
 
 	let boost = 1;
+
+	try {
+		const main_guild = client.guilds.cache.get(supporter_guild_id);
+		const main_member = await main_guild?.members.fetch(message.author.id);
+		const isSupporter = main_member?.roles.cache.has(supporter_role_id);
+		if (!main_guild) client.log.warn('Client is not in the main server');
+		if (isSupporter) boost += 0.1;
+	} catch {
+		// do nothing,
+		// most likely caused by user not being in main server
+	}
 
 	try {
 		const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);

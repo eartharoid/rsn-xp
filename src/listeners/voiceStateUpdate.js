@@ -1,5 +1,6 @@
 
 const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
+const [supporter_guild_id, supporter_role_id] = process.env.SUPPORTER_ROLE.split(/\//);
 
 const { calcLevel } = require('../functions');
 
@@ -22,6 +23,18 @@ module.exports = async (client, old_vs, new_vs) => {
 		const mins = Math.floor(diff / 1000 / 60);
 
 		let boost = 1;
+
+		try {
+			const main_guild = client.guilds.cache.get(supporter_guild_id);
+			const main_member = await main_guild?.members.fetch(new_vs.member.user.id);
+			const isSupporter = main_member?.roles.cache.has(supporter_role_id);
+			if (!main_guild) client.log.warn('Client is not in the main server');
+			if (isSupporter) boost += 0.1;
+		} catch {
+			// do nothing,
+			// most likely caused by user not being in main server
+		}
+
 
 		try {
 			const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);
