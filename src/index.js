@@ -52,18 +52,18 @@ class Bot extends DiscordClient {
 
 		loadCommands(this);
 
-		this.rl = readline.createInterface({
-			input: process.stdin,
-			output: process.stdout
-		});
+		// this.rl = readline.createInterface({
+		// 	input: process.stdin,
+		// 	output: process.stdout
+		// });
 
-		this.rl.on('line', input => {
-			if (input.toLowerCase() === 'reload') {
-				this.commands.forEach((command, name) => delete require.cache[require.resolve(`./commands/${name}`)]);
-				loadCommands(this);
-				this.log.success('Reloaded commands');
-			}
-		});
+		// this.rl.on('line', input => {
+		// 	if (input.toLowerCase() === 'reload') {
+		// 		this.commands.forEach((command, name) => delete require.cache[require.resolve(`./commands/${name}`)]);
+		// 		loadCommands(this);
+		// 		this.log.success('Reloaded commands');
+		// 	}
+		// });
 
 		fs.readdirSync('./src/listeners')
 			.filter(file => file.endsWith('.js'))
