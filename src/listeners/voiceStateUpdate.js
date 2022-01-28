@@ -73,7 +73,7 @@ module.exports = async (client, old_vs, new_vs) => {
 		});
 
 		const level = calcLevel(row.currentPoints);
-		if (level !== row.level) await client.updateLevel(new_vs.member.user, level);
+		if (level !== row.level) client.updateLevel(new_vs.member.user, level); // don't await, too slow
 
 		client.voice_time.delete(new_vs.id);
 	}
