@@ -1,7 +1,4 @@
-const {
-	Message,  // eslint-disable-line no-unused-vars
-	MessageAttachment
-} = require('discord.js');
+const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
 const { calcLevel } = require('../functions');
 
 const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
@@ -82,8 +79,7 @@ module.exports = async (client, message) => {
 	if (level !== row.level) {
 		try {
 			client.updateLevel(message.author, level); // don't await, too slow
-			const attachment = new MessageAttachment(`./assets/level-up-${level}.png`);
-			message.reply({ files: [attachment] });
+			message.reply({ content: `https://static.eartharoid.me/rsn/xp/level-up-${level}.png` });
 		} catch (error) {
 			client.log.error(error);
 		}
