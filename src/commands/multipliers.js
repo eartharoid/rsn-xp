@@ -5,7 +5,6 @@ const {
 
 const {
 	calcBoost,
-	formatTime,
 	isBoosting,
 	isEarlySupporter,
 	isJibletOwner,
@@ -20,20 +19,24 @@ module.exports = async interaction => {
 	let row = await interaction.client.prisma.user.findUnique({ where: { id: user.id } });
 	if (!row) row = await interaction.client.prisma.user.create({ data: { id: user.id } });
 
+	const member = await interaction.guild.members.fetch(user);
+
+	const multiplers = [
+		`Early Supporter: \`${await isEarlySupporter(member) ? 'Yes (+10%)' : 'No'}\``,
+		`JIBLET: \`${await isJibletOwner(member) ? 'Yes (+10%)' : 'No'}\``,
+		`Server boosting: \`${await isBoosting(member) ? 'Yes (+10%)' : 'No'}\``,
+		`Invite in status: \`${await isPromoting(member) ? 'Yes (+10%)' : 'No'}\``,
+		`\n**Total in ${interaction.guild.name}:** \`x${await calcBoost(member)}\``
+	];
+
 	const embed = new MessageEmbed()
 		.setColor('#2077FF')
 		.setAuthor({
 			iconURL: user.displayAvatarURL(),
 			name: user.username
 		})
-		.setTitle('Stats')
-		.setDescription('Your level is calculated using the current number of points you have. Points reset monthly. Check your active multipliers with `/multipliers`.')
-		.addField('Current points', row.currentPoints.toLocaleString('en-US'), true)
-		.addField('Current messages', row.currentMessages.toLocaleString('en-US'), true)
-		.addField('Current voice time', formatTime(row.currentVoiceTime), true)
-		.addField('Total points', row.totalPoints.toLocaleString('en-US'), true)
-		.addField('Total messages', row.totalMessages.toLocaleString('en-US'), true)
-		.addField('Total voice time', formatTime(row.totalVoiceTime), true)
+		.setTitle('Active multipliers')
+		.setDescription(multiplers.join('\n'))
 		.setTimestamp();
 
 	await interaction.editReply({ embeds: [embed] });

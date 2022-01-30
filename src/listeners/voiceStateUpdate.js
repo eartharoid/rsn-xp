@@ -1,8 +1,7 @@
-
-const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
-const [supporter_guild_id, supporter_role_id] = process.env.SUPPORTER_ROLE.split(/\//);
-
-const { calcLevel } = require('../functions');
+const {
+	calcBoost,
+	calcLevel
+} = require('../functions');
 
 /**
  * @param {import("../")} client
@@ -21,34 +20,7 @@ module.exports = async (client, old_vs, new_vs) => {
 		const end = Date.now();
 		const diff =end - start;
 		const mins = Math.floor(diff / 1000 / 60);
-
-		let boost = 1;
-
-		try {
-			const main_guild = client.guilds.cache.get(supporter_guild_id);
-			const main_member = await main_guild?.members.fetch(new_vs.member.user.id);
-			const isSupporter = main_member?.roles.cache.has(supporter_role_id);
-			if (!main_guild) client.log.warn('Client is not in the main server');
-			if (isSupporter) boost += 0.1;
-		} catch {
-			// do nothing,
-			// most likely caused by user not being in main server
-		}
-
-
-		try {
-			const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);
-			const jiblet_member = await jiblet_guild?.members.fetch(new_vs.member.user.id);
-			const is_jiblet_owner = jiblet_member?.roles.cache.has(jiblet_role_id);
-			if (!jiblet_guild) client.log.warn('Client is not in the JIBLET server');
-			if (is_jiblet_owner) boost += 0.1;
-		} catch {
-			// do nothing,
-			// most likely caused by user not being in JIBLETVERSE server
-		}
-
-		if (new_vs.member.premiumSinceTimestamp) boost += 0.1;
-
+		const boost = await calcBoost(new_vs.member);
 		const PPM = old_vs.channelId === process.env.CINEMA_CHANNEL ? 0.5 : 2;
 		const points = Math.ceil(PPM * mins * boost);
 

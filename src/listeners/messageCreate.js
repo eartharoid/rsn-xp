@@ -1,8 +1,8 @@
 const { Message } = require('discord.js'); // eslint-disable-line no-unused-vars
-const { calcLevel } = require('../functions');
-
-const [jiblet_guild_id, jiblet_role_id] = process.env.JIBLET_ROLE.split(/\//);
-const [supporter_guild_id, supporter_role_id] = process.env.SUPPORTER_ROLE.split(/\//);
+const {
+	calcBoost,
+	calcLevel
+} = require('../functions');
 
 const calcPoints = (content, boost) => {
 	content = content.replace(/\s\s/g, '');
@@ -27,34 +27,9 @@ const calcPoints = (content, boost) => {
  * @returns
  */
 module.exports = async (client, message) => {
-	if (message.system || message.author.bot) return; // ignore bots
+	if (message.system || message.author.bot || !message.guild) return; // ignore bots
 
-	let boost = 1;
-
-	try {
-		const main_guild = client.guilds.cache.get(supporter_guild_id);
-		const main_member = await main_guild?.members.fetch(message.author.id);
-		const isSupporter = main_member?.roles.cache.has(supporter_role_id);
-		if (!main_guild) client.log.warn('Client is not in the main server');
-		if (isSupporter) boost += 0.1;
-	} catch {
-		// do nothing,
-		// most likely caused by user not being in main server
-	}
-
-	try {
-		const jiblet_guild = client.guilds.cache.get(jiblet_guild_id);
-		const jiblet_member = await jiblet_guild?.members.fetch(message.author.id);
-		const isJibletOwner = jiblet_member?.roles.cache.has(jiblet_role_id);
-		if (!jiblet_guild) client.log.warn('Client is not in the JIBLET server');
-		if (isJibletOwner) boost += 0.1;
-	} catch {
-		// do nothing,
-		// most likely caused by user not being in JIBLETVERSE server
-	}
-
-	if (message.member.premiumSinceTimestamp) boost += 0.1;
-
+	const boost = await calcBoost(message.member);
 	const points = calcPoints(message.content, boost);
 	client.log.verbose(`event:earn_xp:type=message;guild=${message.guild.id};channel=${message.channel.id};user=${message.author.id};boost=${boost};points=${points}`);
 
