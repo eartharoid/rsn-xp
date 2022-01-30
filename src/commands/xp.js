@@ -21,7 +21,7 @@ module.exports = async interaction => {
 		// most likely caused by user not being in the server
 	}
 
-	if (!hasPermission) return interaction.client.log.warn(`"${interaction.user.tag} attempted to use the "xp" command`);
+	if (!hasPermission) return interaction.client.log.warn(`"${interaction.user.tag}" attempted to use the "xp" command`);
 
 	switch (interaction.options.getSubcommand()) {
 	case 'add': {
