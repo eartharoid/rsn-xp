@@ -3,14 +3,7 @@ const {
 	MessageEmbed
 } = require('discord.js');
 
-const {
-	calcBoost,
-	formatTime,
-	isBoosting,
-	isEarlySupporter,
-	isJibletOwner,
-	isPromoting
-} = require('../functions');
+const { formatTime } = require('../functions');
 
 /**
  * @param {CommandInteraction} interaction
